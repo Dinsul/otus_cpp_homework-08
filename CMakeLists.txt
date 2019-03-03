@@ -17,6 +17,8 @@ include("${CMAKE_BINARY_DIR}/conan.cmake")
 message(STATUS "Run 'conan install ...'")
 conan_cmake_run(REQUIRES
     boost/1.68.0@conan/stable
+    OpenSSL/1.0.2@conan/stable
+
     OPTIONS boost:shared=True
     BASIC_SETUP CMAKE_TARGETS
     BUILD missing)
@@ -25,43 +27,21 @@ conan_cmake_run(REQUIRES
 include(${PROJECT_BINARY_DIR}/conanbuildinfo.cmake)
 conan_basic_setup()
 
+#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_GLIBCXX_USE_CXX11_ABI=0")
+
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+#if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang" OR "GNU")
+#    set(CMAKE_CXX_FLAGS "-Wpedantic;-Wall;-Wextra")
+#endif()
+
 add_custom_target(travis SOURCES ".travis.yml")
 
 set(Boost_USE_STATIC_LIBS        OFF)
 set(Boost_USE_MULTITHREADED      ON)
 
-include_directories("${CONAN_INCLUDE_DIRS}" "${CMAKE_SOURCE_DIR}")
+include_directories("${CONAN_INCLUDE_DIRS}" "${CMAKE_SOURCE_DIR}/source")
 
-add_executable(${PROJECT_NAME} "main.cpp" "${PROJECT_NAME}.cpp" "${PROJECT_NAME}.h")
-add_executable(test_${PROJECT_NAME} "test_${PROJECT_NAME}.cpp" "${PROJECT_NAME}.cpp" "${PROJECT_NAME}.h")
-
-set_target_properties(${PROJECT_NAME} PROPERTIES
-    CXX_STANDARD 17
-    CXX_STANDARD_REQUIRED ON
-    COMPILE_DEFINITIONS BOOST_TEST_DYN_LINK
-    COMPILE_OPTIONS "-Wpedantic;-Wall;-Wextra"
-    )
-
-target_link_libraries(${PROJECT_NAME}
-    ${CONAN_LIBS}
-    )
-
-target_link_libraries(test_${PROJECT_NAME}
-    ${CONAN_LIBS}
-    )
-
-install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION bin)
-
-set(CPACK_GENERATOR DEB)
-
-set(CPACK_PACKAGE_VERSION_MAJOR "${PROJECT_VERSION_MAJOR}")
-set(CPACK_PACKAGE_VERSION_MINOR "${PROJECT_VERSION_MINOR}")
-set(CPACK_PACKAGE_VERSION_PATCH "${PROJECT_VERSION_PATCH}")
-
-set(CPACK_PACKAGE_CONTACT dinsul2.0@gmail.com)
-
-include (CPack)
-
-enable_testing()
-
-add_test(test_1 "bin/test_${PROJECT_NAME}")
+add_subdirectory(source)
+add_subdirectory(tests)

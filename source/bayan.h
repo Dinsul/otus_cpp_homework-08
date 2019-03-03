@@ -2,34 +2,43 @@
 
 #include <string>
 #include <vector>
+#include <memory>
 
 class BayanSettings
 {
-    BayanSettings() {}
+    BayanSettings() : blockSize(512 * 16) {}
 
 public:
     size_t blockSize;
+    size_t minSize;
+    unsigned int deep;
+    std::vector<std::string> scanDir;
+    std::vector<std::string> notScanDir;
     enum class HashTypes
     {
         md5
-    } hash;
+    } hash_type;
 
-    BayanSettings &operator ()();
+    static BayanSettings &get ();
 };
+
+std::string createHash(const unsigned char *data, size_t size);
+size_t getFileSize(const char *filename);
 
 class FileComparator
 {
     std::string _filename;
-    std::vector<std::string> _hashes;
 
-    //TODO file descriptor
-    size_t _size;
-    size_t _seek;
     bool _isFull;
     bool _isOpen;
+    size_t _size;
+    size_t _seek;
+
+    std::unique_ptr<FILE, int(*)(FILE*)> _file;
+    std::vector<std::string> _hashes;
 
 public:
-    FileComparator();
+    FileComparator(const std::string &filename);
 
     bool open();
     void close();
@@ -39,4 +48,8 @@ public:
     bool isFull() const;
     bool isOpen() const;
     size_t size() const;
+    size_t seek() const;
+
+    bool createNextHash(size_t size, std::string &hash);
+    bool getHash(size_t num, std::string &hash) const;
 };
