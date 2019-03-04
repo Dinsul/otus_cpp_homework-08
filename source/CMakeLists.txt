@@ -1,7 +1,12 @@
 add_executable(${PROJECT_NAME}
     "main.cpp"
     "${PROJECT_NAME}.cpp"
-    "${PROJECT_NAME}.h")
+    "${PROJECT_NAME}.h"
+    "options.cpp"
+    "options.h"
+    "filecomparator.cpp"
+    "filecomparator.h"
+    )
 
 set_target_properties(${PROJECT_NAME} PROPERTIES
     COMPILE_DEFINITIONS BOOST_TEST_DYN_LINK
