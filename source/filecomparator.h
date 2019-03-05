@@ -34,4 +34,5 @@ public:
 
     bool createNextHash(size_t size, std::string &hash);
     bool getHash(size_t num, std::string &hash) const;
+    const std::string &getFilename() const;
 };

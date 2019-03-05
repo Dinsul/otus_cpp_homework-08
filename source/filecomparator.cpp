@@ -77,6 +77,11 @@ size_t FileComparator::seek() const
     return _seek;
 }
 
+const std::string &FileComparator::getFilename() const
+{
+    return _filename;
+}
+
 FileComparator::FileComparator(const std::string &filename) :
     _filename(filename),
     _isFull(false),

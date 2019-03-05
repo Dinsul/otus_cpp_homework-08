@@ -2,25 +2,44 @@
 
 #include "options.h"
 #include "filecomparator.h"
-
+#include "bayan.h"
 
 int main(int argc, char** argv)
 {
     if (!intBayanOptions(argc, argv, BayanSettings::get())) {
         return 1;
     }
-//    if (argc < 3)
+
+    std::list<FileComparator> list;
+
+    getComparatorsFromSettings(list);
+
+    for (auto first = list.begin(); first != list.end(); )
+    {
+        for (auto second = first; second != list.end(); )
+        {
+            ++second;
+            if (*first == *second)
+            {
+                std::cout << first->getFilename()
+                          << " == " << second->getFilename()
+                          << std::endl;
+            }
+
+        }
+
+        ++first;
+    }
+
+//    for (auto &el : list)
 //    {
-//        std::cout << "Usage: bayan <filename1> <filename2>" << std::endl;
-//        return 1;
+
+//        std::cout << el << std::endl;
 //    }
 
-    FileComparator fc1(BayanSettings::get().scanDir[0]);
-    FileComparator fc2(BayanSettings::get().scanDir[1]);
+/*123.654 [pos]
 
-    std::cout << (fc1 == fc2 ? "true" : "false") << std::endl;
-
-//    std::cout << desc << std::endl;
+            -->*/
 
     std::cout << "deep:      " << BayanSettings::get().deep      << "\n"
               << "minSize:   " << BayanSettings::get().minSize   << "\n"
