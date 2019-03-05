@@ -16,19 +16,44 @@ int main(int argc, char** argv)
 
     for (auto first = list.begin(); first != list.end(); )
     {
-        for (auto second = first; second != list.end(); )
+        std::list<std::string> duplicates;
+
+        auto second = first;
+        ++second;
+
+        while (second != list.end())
         {
-            ++second;
             if (*first == *second)
             {
-                std::cout << first->getFilename()
-                          << " == " << second->getFilename()
-                          << std::endl;
-            }
+                duplicates.emplace_back(second->getFilename());
 
+                second = list.erase(second);
+            }
+            else
+            {
+                ++second;
+            }
         }
 
-        ++first;
+        if (!duplicates.empty())
+        {
+            std::cout << first->getFilename() << "\n";
+
+            for (auto &filename : duplicates)
+            {
+                std::cout << filename << "\n";
+            }
+
+            std::cout << std::endl;
+
+            duplicates.clear();
+
+            first = list.erase(first);
+        }
+        else
+        {
+            ++first;
+        }
     }
 
 //    for (auto &el : list)
