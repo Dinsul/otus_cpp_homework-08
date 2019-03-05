@@ -99,7 +99,7 @@ bool FileComparator::createNextHash(size_t size, std::string &hash)
     {
         bulkData = new unsigned char[size];
 
-        fseek(_file.get(), _seek, SEEK_SET);
+        fseek(_file.get(), static_cast<long>(_seek), SEEK_SET);
 
         auto readSize = fread(bulkData, 1, size, _file.get());
 
@@ -115,7 +115,9 @@ bool FileComparator::createNextHash(size_t size, std::string &hash)
             memset(bulkData + readSize, 0, size - readSize);
         }
 
-        hash = _hashes.emplace_back(createHash(bulkData, size));
+        hash = createHash(bulkData, size);
+
+        _hashes.emplace_back(hash);
 
         delete [] bulkData;
 
