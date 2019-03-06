@@ -19,7 +19,7 @@ conan_cmake_run(REQUIRES
     boost/1.68.0@conan/stable
     OpenSSL/1.0.2@conan/stable
 
-    OPTIONS boost:shared=True
+    OPTIONS boost:shared=False
     BASIC_SETUP CMAKE_TARGETS
     BUILD missing)
 
