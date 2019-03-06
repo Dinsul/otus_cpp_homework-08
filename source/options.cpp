@@ -5,7 +5,7 @@
 
 
 BayanSettings::BayanSettings() :
-    blockSize(512 * 16),
+    blockSize(1024 * 8),
     minSize(1024 * 1024),
     deep(0),
     hash_type(HashTypes::md5)

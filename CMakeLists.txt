@@ -30,7 +30,7 @@ conan_basic_setup()
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-add_custom_target(travis SOURCES ".travis.yml")
+add_custom_target(sundries SOURCES ".travis.yml" "README.md")
 
 set(Boost_USE_STATIC_LIBS        ON)
 set(Boost_USE_MULTITHREADED      ON)
