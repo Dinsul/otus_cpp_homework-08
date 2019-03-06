@@ -1,6 +1,7 @@
 #include <boost/filesystem/operations.hpp>
 #include <boost/filesystem/fstream.hpp>
 #include <iostream>
+#include <algorithm>
 
 #include "bayan.h"
 #include "options.h"
@@ -13,7 +14,7 @@ bool getComparatorsFromSettings(std::list<FileComparator> &filenames)
 
     for(const auto &el : BayanSettings::get().scanDir)
     {
-        curPath = bf::path(el);
+        curPath = bf::path(el).normalize();
 
         if (bf::exists(curPath))
         {
@@ -29,7 +30,6 @@ bool getComparatorsFromSettings(std::list<FileComparator> &filenames)
 
     return true;
 }
-
 
 void addAllFilseFromDir(const boost::filesystem::path &dir,
                         std::list<FileComparator> &filenames,
@@ -48,7 +48,18 @@ void addAllFilseFromDir(const boost::filesystem::path &dir,
 
             if (bf::is_directory(it->path()) && deep)
             {
-                addAllFilseFromDir(it->path(), filenames, deep - 1);
+                // Проверяем нету ли текущей директории в списке исключения.
+                if (std::find_if(BayanSettings::get().notScanDir.begin(),
+                                 BayanSettings::get().notScanDir.end(),
+                                 [&it](std::string &el) {
+
+                                 auto first  = bf::absolute(it->path()).normalize().string();
+                                 auto second = bf::absolute(bf::path(el)).normalize().string();
+
+                                 return first == second ;}) == BayanSettings::get().notScanDir.end())
+                {
+                    addAllFilseFromDir(it->path(), filenames, deep - 1);
+                }
             }
 
             ++it;
