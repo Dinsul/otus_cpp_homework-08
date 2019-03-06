@@ -45,3 +45,7 @@ include_directories("${CONAN_INCLUDE_DIRS}" "${CMAKE_SOURCE_DIR}/source")
 
 add_subdirectory(source)
 add_subdirectory(tests)
+
+enable_testing()
+
+add_test(test_1 "${CMAKE_BINARY_DIR}/bin/test_${PROJECT_NAME}")
