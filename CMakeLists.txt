@@ -27,18 +27,12 @@ conan_cmake_run(REQUIRES
 include(${PROJECT_BINARY_DIR}/conanbuildinfo.cmake)
 conan_basic_setup()
 
-#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_GLIBCXX_USE_CXX11_ABI=0")
-
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-#if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang" OR "GNU")
-#    set(CMAKE_CXX_FLAGS "-Wpedantic;-Wall;-Wextra")
-#endif()
-
 add_custom_target(travis SOURCES ".travis.yml")
 
-set(Boost_USE_STATIC_LIBS        OFF)
+set(Boost_USE_STATIC_LIBS        ON)
 set(Boost_USE_MULTITHREADED      ON)
 
 include_directories("${CONAN_INCLUDE_DIRS}" "${CMAKE_SOURCE_DIR}/source")
