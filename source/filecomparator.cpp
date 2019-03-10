@@ -195,7 +195,7 @@ bool FileComparator::operator ==(FileComparator &other)
 
             ++counter;
         }
-        while (seek() < size());
+        while (!(this->isFull()) || !(other.isFull()));
 
         return true;
     }
