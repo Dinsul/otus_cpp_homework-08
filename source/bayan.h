@@ -1,13 +1,12 @@
 #pragma once
 
 #include <list>
-#include <string>
-
-#include <filecomparator.h>
 
 namespace boost::filesystem {
 class path;
 }
+
+class FileComparator;
 
 bool getComparatorsFromSettings(std::list<FileComparator> &filenames);
 

@@ -5,6 +5,7 @@
 
 #include "bayan.h"
 #include "options.h"
+#include "filecomparator.h"
 
 namespace bf = boost::filesystem;
 

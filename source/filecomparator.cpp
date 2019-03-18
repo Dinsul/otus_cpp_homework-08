@@ -8,11 +8,17 @@
 
 #if (__unix)
 # include <sys/stat.h>
+# include <errno.h>
 
 size_t getFileSize(const char *filename)
 {
     struct stat st;
-    stat(filename, &st);
+    if (stat(filename, &st) < 0)
+    {
+        std::cerr << "Can not get fileinfo. Err:\"" << strerror(errno) << std::endl;
+
+        return 0;
+    }
 
     return static_cast<size_t>(st.st_size);
 }
@@ -88,7 +94,7 @@ FileComparator::FileComparator(const std::string &filename) :
     _isOpen(false),
     _size(getFileSize(filename.c_str())),
     _seek(0),
-    _file(nullptr, [](FILE*)->int{})
+    _file(nullptr, [](FILE*)->int{return 0;})
 {}
 
 bool FileComparator::createNextHash(size_t size, std::string &hash)
