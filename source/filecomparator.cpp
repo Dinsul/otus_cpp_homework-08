@@ -24,17 +24,17 @@ size_t getFileSize(const char *filename)
 }
 
 #elif (WIN32)
-# include <windows.h>
+# include <Windows.h>
 
 size_t getFileSize(const char *filename)
 {
-    auto hFile = CreateFile(lpcTheFile,
-                       GENERIC_READ | GENERIC_WRITE,
+    auto hFile = CreateFile(filename,
+                       GENERIC_READ,
                        0,
-                       NULL,
-                       CREATE_ALWAYS,
+                       nullptr,
+                       OPEN_EXISTING,
                        FILE_ATTRIBUTE_NORMAL,
-                       NULL);
+                       nullptr);
 
     if (hFile == INVALID_HANDLE_VALUE)
     {
@@ -42,7 +42,7 @@ size_t getFileSize(const char *filename)
         return 0;
     }
 
-    size_t size = GetFileSize();
+    size_t size = GetFileSize(hFile, nullptr);
 
     CloseHandle(hFile);
 
